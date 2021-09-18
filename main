@@ -1,0 +1,286 @@
+HideGuiKey = "j"
+
+local player = game.Players.LocalPlayer
+local mouse = player:GetMouse()
+local stats = {"Strength","Durability","Chakra","Sword","Agility"}
+local active = {}
+local moduleScript = require(player.PlayerGui.Main.MainClient.StatModuleClient)
+local auto = false
+
+local ui = Instance.new("ScreenGui", game:GetService("CoreGui"))
+
+local frame1 = Instance.new("Frame", ui)
+frame1.Size = UDim2.fromOffset(250, 80)
+frame1.Position = UDim2.new(0.5, -100, 0.68, 0)
+frame1.BorderSizePixel = 1
+frame1.BackgroundTransparency = .5
+frame1.BackgroundColor3 = Color3.new(20,20,20)
+frame1.Draggable = true
+frame1.Active = true
+
+local text1 = Instance.new("TextLabel", frame1)
+text1.Size = UDim2.fromOffset(frame1.Size.X.Offset - 20, 20)
+text1.Position = UDim2.new(0,20,0,0)
+text1.BorderSizePixel = 0
+text1.BackgroundTransparency = 0
+text1.BackgroundColor3 = Color3.new(0.1, 0.1, 0.1) 
+text1.TextColor3 = Color3.new(1,1,1)
+text1.ZIndex = 1
+text1.Draggable = false
+text1.Active = true
+text1.Text = "Anime Fighting Sim v1.0"
+
+local kill = Instance.new("TextButton", frame1)
+kill.Size = UDim2.fromOffset(20,20)
+kill.Position = UDim2.new(0,0,0,0)
+kill.BorderSizePixel = 1
+kill.BorderColor3 = Color3.new(1,1,1)
+kill.BackgroundTransparency = 0
+kill.BackgroundColor3 = Color3.new(0.1,0.1,0.1)
+kill.TextColor3 = Color3.new(1,1,1)
+kill.ZIndex = 10
+kill.Draggable = false
+kill.Active = true
+kill.Text = "X"
+
+local farm = Instance.new("TextButton", frame1)
+farm.Size = UDim2.fromOffset(frame1.Size.X.Offset, 20)
+farm.Position = UDim2.new(0,0,0,20)
+farm.BorderSizePixel = 0
+farm.BackgroundTransparency = .2
+farm.BackgroundColor3 = Color3.new(0.1,0.1,0.1)
+farm.TextColor3 = Color3.new(1,1,1)
+farm.ZIndex = 4
+farm.Draggable = false
+farm.Active = true
+farm.Text = 'Farming: OFF'
+
+local strengthToggle = Instance.new("TextButton", frame1)
+strengthToggle.Size = UDim2.fromOffset(frame1.Size.X.Offset/5, 20)
+strengthToggle.Position = UDim2.new(0,0,0,40)
+strengthToggle.BorderSizePixel = 0
+strengthToggle.BackgroundTransparency = .2
+strengthToggle.BackgroundColor3 = Color3.new(0.1,0.1,0.1)
+strengthToggle.TextColor3 = Color3.new(1,1,1)
+strengthToggle.ZIndex = 4
+strengthToggle.Draggable = false
+strengthToggle.Active = true
+strengthToggle.Text = 'Strength'
+
+local duraToggle = Instance.new("TextButton", frame1)
+duraToggle.Size = UDim2.fromOffset(frame1.Size.X.Offset/5, 20)
+duraToggle.Position = UDim2.new(0,frame1.Size.X.Offset/5,0,40)
+duraToggle.BorderSizePixel = 0
+duraToggle.BackgroundTransparency = .2
+duraToggle.BackgroundColor3 = Color3.new(0.1,0.1,0.1)
+duraToggle.TextColor3 = Color3.new(1,1,1)
+duraToggle.ZIndex = 4
+duraToggle.Draggable = false
+duraToggle.Active = true
+duraToggle.Text = 'Durability'
+
+local chakraToggle = Instance.new("TextButton", frame1)
+chakraToggle.Size = UDim2.fromOffset(frame1.Size.X.Offset/5, 20)
+chakraToggle.Position = UDim2.new(0,frame1.Size.X.Offset/5*2,0,40)
+chakraToggle.BorderSizePixel = 0
+chakraToggle.BackgroundTransparency = .2
+chakraToggle.BackgroundColor3 = Color3.new(0.1,0.1,0.1)
+chakraToggle.TextColor3 = Color3.new(1,1,1)
+chakraToggle.ZIndex = 4
+chakraToggle.Draggable = false
+chakraToggle.Active = true
+chakraToggle.Text = 'Chakra'
+
+local swordToggle = Instance.new("TextButton", frame1)
+swordToggle.Size = UDim2.fromOffset(frame1.Size.X.Offset/5, 20)
+swordToggle.Position = UDim2.new(0,frame1.Size.X.Offset/5*3,0,40)
+swordToggle.BorderSizePixel = 0
+swordToggle.BackgroundTransparency = .2
+swordToggle.BackgroundColor3 = Color3.new(0.1,0.1,0.1)
+swordToggle.TextColor3 = Color3.new(1,1,1)
+swordToggle.ZIndex = 4
+swordToggle.Draggable = false
+swordToggle.Active = true
+swordToggle.Text = 'Sword'
+
+local agilityToggle = Instance.new("TextButton", frame1)
+agilityToggle.Size = UDim2.fromOffset(frame1.Size.X.Offset/5, 20)
+agilityToggle.Position = UDim2.new(0,frame1.Size.X.Offset/5*4,0,40)
+agilityToggle.BorderSizePixel = 0
+agilityToggle.BackgroundTransparency = .2
+agilityToggle.BackgroundColor3 = Color3.new(0.1,0.1,0.1)
+agilityToggle.TextColor3 = Color3.new(1,1,1)
+agilityToggle.ZIndex = 4
+agilityToggle.Draggable = false
+agilityToggle.Active = true
+agilityToggle.Text = 'Agility'
+
+local speedText = Instance.new("TextLabel", frame1)
+speedText.Size = UDim2.fromOffset(frame1.Size.X.Offset/2-40, 20)
+speedText.Position = UDim2.new(0,0,0,60)
+speedText.BorderSizePixel = 0
+speedText.BackgroundTransparency = .2
+speedText.BackgroundColor3 = Color3.new(0.1,0.1,0.1)
+speedText.TextColor3 = Color3.new(1,1,1)
+speedText.ZIndex = 4
+speedText.Draggable = false
+speedText.Active = true
+speedText.Text = 'Speed:'
+
+local jumpText = Instance.new("TextLabel", frame1)
+jumpText.Size = UDim2.fromOffset(frame1.Size.X.Offset/2-40, 20)
+jumpText.Position = UDim2.new(0,frame1.Size.X.Offset/2,0,60)
+jumpText.BorderSizePixel = 0
+jumpText.BackgroundTransparency = .2
+jumpText.BackgroundColor3 = Color3.new(0.1,0.1,0.1)
+jumpText.TextColor3 = Color3.new(1,1,1)
+jumpText.ZIndex = 4
+jumpText.Draggable = false
+jumpText.Active = true
+jumpText.Text = 'Jump:'
+
+local speed = Instance.new("TextBox", frame1)
+speed.Size = UDim2.fromOffset(40, 20)
+speed.Position = UDim2.new(0,frame1.Size.X.Offset/2-40,0,60)
+speed.BorderSizePixel = 1
+speed.BorderColor3 = Color3.new(1,1,1)
+speed.BackgroundTransparency = .2
+speed.BackgroundColor3 = Color3.new(0.1,0.1,0.1)
+speed.TextColor3 = Color3.new(1,1,1)
+speed.ZIndex = 5
+speed.Draggable = false
+speed.Active = true
+speed.Text = ''
+speed.TextEditable = true
+
+local jump = Instance.new("TextBox", frame1)
+jump.Size = UDim2.fromOffset(40, 20)
+jump.Position = UDim2.new(0,frame1.Size.X.Offset-40,0,60)
+jump.BorderSizePixel = 1
+jump.BorderColor3 = Color3.new(1,1,1)
+jump.BackgroundTransparency = .2
+jump.BackgroundColor3 = Color3.new(0.1,0.1,0.1)
+jump.TextColor3 = Color3.new(1,1,1)
+jump.ZIndex = 5
+jump.Draggable = false
+jump.Active = true
+jump.Text = ''
+jump.TextEditable = true
+
+player.Idled:connect(function()
+    game:GetService("VirtualUser"):CaptureController()
+    game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+end)
+
+local function addStat(stat)
+    active[stats[stat]] = stats[stat]
+end
+
+local function removeStat(stat)
+    active[stats[stat]] = nil
+end
+
+keyConnectMain = mouse.KeyDown:connect(function(key)
+    if key == HideGuiKey then
+        if(ui.Enabled) then
+            ui.Enabled = false
+        else
+            ui.Enabled = true
+        end
+    end
+end)
+
+farm.MouseButton1Click:connect(function()
+    if auto then
+        auto = false
+        farm.Text = "Farming: OFF"
+    else
+        auto = true
+        farm.Text = "Farming: ON"
+    end
+end)
+
+strengthToggle.MouseButton1Click:connect(function()
+    if strengthToggle.BackgroundColor3 == Color3.new(0.1,0.1,0.1) then
+        strengthToggle.BackgroundColor3 = Color3.new(0,1,0)
+        addStat(1)
+    else
+        strengthToggle.BackgroundColor3 = Color3.new(0.1,0.1,0.1)
+        removeStat(1)
+    end
+end)
+
+duraToggle.MouseButton1Click:connect(function()
+    if duraToggle.BackgroundColor3 == Color3.new(0.1,0.1,0.1) then
+        duraToggle.BackgroundColor3 = Color3.new(0,1,0)
+        addStat(2)
+    else
+        duraToggle.BackgroundColor3 = Color3.new(0.1,0.1,0.1)
+        removeStat(2)
+    end
+end)
+
+chakraToggle.MouseButton1Click:connect(function()
+    if chakraToggle.BackgroundColor3 == Color3.new(0.1,0.1,0.1) then
+        chakraToggle.BackgroundColor3 = Color3.new(0,1,0)
+        addStat(3)
+    else
+        chakraToggle.BackgroundColor3 = Color3.new(0.1,0.1,0.1)
+        removeStat(3)
+    end
+end)
+
+swordToggle.MouseButton1Click:connect(function()
+    if swordToggle.BackgroundColor3 == Color3.new(0.1,0.1,0.1) then
+        swordToggle.BackgroundColor3 = Color3.new(0,1,0)
+        addStat(4)
+    else
+        swordToggle.BackgroundColor3 = Color3.new(0.1,0.1,0.1)
+        removeStat(4)
+    end
+end)
+
+agilityToggle.MouseButton1Click:connect(function()
+    if agilityToggle.BackgroundColor3 == Color3.new(0.1,0.1,0.1) then
+        agilityToggle.BackgroundColor3 = Color3.new(0,1,0)
+        addStat(5)
+    else
+        agilityToggle.BackgroundColor3 = Color3.new(0.1,0.1,0.1)
+        removeStat(5)
+    end
+end)
+
+kill.MouseButton1Click:connect(function()
+    auto = false
+    ui:Destroy()
+    keyConnectMain:Disconnect()
+end)
+
+spawn(function()
+    while wait() do
+        if auto then
+            for i,v in pairs(active) do
+                moduleScript.SendToServer(v)
+                wait(1.6)
+            end
+        end
+    end
+end)
+
+spawn(function()
+    while wait() do
+        local character = player.Character
+        if character then
+            local root = character.HumanoidRootPart
+            local hum = character.Humanoid
+            if hum then
+                if type(tonumber(jump.Text)) == "number" then
+                    hum.JumpPower = tonumber(jump.Text)
+                end
+                if type(tonumber(speed.Text)) == "number" then
+                    hum.WalkSpeed = tonumber(speed.Text)
+                end
+            end
+        end
+    end
+end)
